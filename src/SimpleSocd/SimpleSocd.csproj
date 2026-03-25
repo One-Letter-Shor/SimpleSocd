@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <ModName>SimpleSocd</ModName>
+        <ModAuthor>OneLetterShor</ModAuthor>
+        <RootNamespace>$(ModAuthor).$(ModName)</RootNamespace>
+        <AssemblyName>$(RootNamespace)</AssemblyName>
+        <RepoDir>$(MSBuildThisFileDirectory)../../</RepoDir>
+        <TargetFramework>net48</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <GenerateNullableAttributes>true</GenerateNullableAttributes>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <DefineConstants>$(DefineConstants);CAN_LOG_SOFT_DEPENDENCY_CHANGE</DefineConstants>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Data.DataSetExtensions" />
+        <Reference Include="System.Xml" />
+        <Reference Include="System.Xml.Linq" />
+    </ItemGroup>
+    <ItemGroup>
+        <ExternalAssemblies Include="$(RepoDir)lib/*.dll" />
+        
+        <Reference Include="@(ExternalAssemblies)">
+            <HintPath>%(Identity)</HintPath>
+            <Private>False</Private>
+        </Reference>
+        
+        <ExternalAssemblies Remove="$(RepoDir)lib/**" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Hafner.Compatibility.NullableReferenceTypeAttributes" Version="1.0.0" />
+    </ItemGroup>
+    
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Copy SourceFiles="$(TargetDir)$(TargetName).dll;$(TargetDir)$(TargetName).pdb"
+              DestinationFolder="$(RepoDir)dist/plugins" />
+    </Target>
+</Project>
