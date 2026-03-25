@@ -26,6 +26,8 @@ public sealed class Plugin : BaseUnityPlugin
     
     public void ApplyHooksAndEvents()
     {
+        InputHandler.ApplyHooksAndEvents();
+        
         if (Compat.GeneralCompat.IsRainMeadowEnabled)
             ApplyRainMeadowHooksAndEvents();
         
